@@ -3,7 +3,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
       <div class="container">
         <router-link class="navbar-brand" to="/">Insight Hire</router-link>
-        <div class="collapse navbar-collapse">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
               <router-link class="nav-link" to="/">Jobs</router-link>
@@ -20,7 +23,18 @@
     </nav>
     
     <main class="container mt-4">
-      <router-view></router-view>
+      <!-- For Job routes (Home and JobDetail) -->
+      <div v-if="$route.name === 'Home' || $route.name === 'JobDetail'" class="row">
+        <div class="col-md-3">
+          <router-view name="sidebar"></router-view>
+        </div>
+        <div class="col-md-9">
+          <router-view></router-view>
+        </div>
+      </div>
+      
+      <!-- For other routes (Apply, ToDo) -->
+      <router-view v-else></router-view>
     </main>
   </div>
 </template>

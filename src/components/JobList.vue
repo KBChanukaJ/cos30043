@@ -2,13 +2,16 @@
   <div class="job-explorer">
     <h2>Job Explorer</h2>
     <div class="job-list">
+      <!-- Link overview vue -->
       <router-link 
         to="/" 
         class="job-link"
         active-class="active"
       >
-        Overview
+        Overview 
       </router-link>
+
+      <!-- link JobDetail.vue -->
       <router-link
         v-for="job in jobs"
         :key="job.job_id"
