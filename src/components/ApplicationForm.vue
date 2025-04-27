@@ -6,6 +6,7 @@
       method="post" 
       action="http://mercury.swin.edu.au/it000000/formtest.php"
       @submit.prevent="submitForm"
+      ref="formElement"
       novalidate
     >
       <!-- Personal Information Fieldset -->
@@ -19,6 +20,7 @@
               type="text" 
               class="form-control" 
               id="firstName" 
+              name="firstName"
               v-model="form.firstName"
               :class="{ 'is-invalid': errors.firstName }"
               @blur="validateField('firstName')"
@@ -32,6 +34,7 @@
               type="text" 
               class="form-control" 
               id="lastName" 
+              name="lastName"
               v-model="form.lastName"
               :class="{ 'is-invalid': errors.lastName }"
               @blur="validateField('lastName')"
@@ -47,6 +50,7 @@
               type="text" 
               class="form-control" 
               id="username" 
+              name="username"
               v-model="form.username"
               :class="{ 'is-invalid': errors.username }"
               @blur="validateField('username')"
@@ -60,6 +64,7 @@
               type="email" 
               class="form-control" 
               id="email" 
+              name="email"
               v-model="form.email"
               :class="{ 'is-invalid': errors.email }"
               @blur="validateField('email')"
@@ -80,6 +85,7 @@
               type="password" 
               class="form-control" 
               id="password" 
+              name="password"
               v-model="form.password"
               :class="{ 'is-invalid': errors.password }"
               @blur="validateField('password')"
@@ -96,6 +102,7 @@
               type="password" 
               class="form-control" 
               id="confirmPassword" 
+              name="confirmPassword"
               v-model="form.confirmPassword"
               :class="{ 'is-invalid': errors.confirmPassword }"
               @blur="validateField('confirmPassword')"
@@ -115,6 +122,7 @@
             type="text" 
             class="form-control" 
             id="streetAddress" 
+            name="streetAddress"
             v-model="form.streetAddress"
             :class="{ 'is-invalid': errors.streetAddress }"
             @blur="validateField('streetAddress')"
@@ -130,6 +138,7 @@
               type="text" 
               class="form-control" 
               id="suburb" 
+              name="suburb"
               v-model="form.suburb"
               :class="{ 'is-invalid': errors.suburb }"
               @blur="validateField('suburb')"
@@ -144,6 +153,7 @@
               type="text" 
               class="form-control" 
               id="postcode" 
+              name="postcode"
               v-model="form.postcode"
               :class="{ 'is-invalid': errors.postcode }"
               @blur="validateField('postcode')"
@@ -165,6 +175,7 @@
             type="tel" 
             class="form-control" 
             id="mobileNumber" 
+            name="mobileNumber"
             v-model="form.mobileNumber"
             :class="{ 'is-invalid': errors.mobileNumber }"
             @blur="validateField('mobileNumber')"
@@ -180,6 +191,7 @@
             type="date" 
             class="form-control" 
             id="dob" 
+            name="dob"
             v-model="form.dob"
             :class="{ 'is-invalid': errors.dob }"
             @blur="validateField('dob')"
@@ -197,6 +209,7 @@
           <select 
             class="form-select" 
             id="jobCategory" 
+            name="jobCategory"
             v-model="form.jobCategory"
             :class="{ 'is-invalid': errors.jobCategory }"
             @blur="validateField('jobCategory')"
@@ -229,8 +242,8 @@
       
       <!-- Submit Button -->
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary btn-lg">
-          Submit Application
+        <button type="submit" class="btn btn-primary btn-lg" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
         </button>
       </div>
     </form>
@@ -258,6 +271,7 @@ export default {
       },
       errors: {},
       showTerms: false,
+      isSubmitting: false,
       jobCategories: [
         'AI', 
         'Data Science', 
@@ -381,15 +395,14 @@ export default {
       });
       
       // Check if any errors exist
-      const hasErrors = Object.values(this.errors).some(error => error !== '');
-      
-      if (!hasErrors) {
-        // Form is valid, submit it
-        this.$el.submit();
-      }
+      return !Object.values(this.errors).some(error => error !== '');
     },
     submitForm() {
-      this.validateForm();
+      if (this.validateForm()) {
+        this.isSubmitting = true;
+        // Use the form reference to submit
+        this.$refs.formElement.submit();
+      }
     }
   }
 };
